@@ -1,0 +1,91 @@
+---
+title: "Estatística produtos mais vendidoz - Amazon"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyquant)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(rvest)
+library(stringr)
+library(data.table)
+library(DT)
+library(readr)
+
+url <- "https://www.amazon.com.br/gp/bestsellers/electronics/16243890011?ref_=Oct_d_obs_S&pd_rd_w=CaIAj&content-id=amzn1.sym.574d7dde-c8d1-436d-a7fc-f2654a8c3190&pf_rd_p=574d7dde-c8d1-436d-a7fc-f2654a8c3190&pf_rd_r=TN5056Y4YTHGNF3EH3EH&pd_rd_wg=YIIgt&pd_rd_r=c310284c-5696-454a-9e22-d913b2312834"
+amazon_page <- read_html(url)
+
+amazon_cel_names <- html_nodes(amazon_page, '._cDEzb_p13n-sc-css-line-clamp-3_g3dy1')
+amazon_cel_prices <- html_nodes(amazon_page, '.a-size-base.a-color-price')
+cel_names <- html_text(amazon_cel_names)
+cel_prices <- html_text(amazon_cel_prices)
+
+data <- data.table(name = c(cel_names), price = c(cel_prices))
+
+new_table <- data %>% 
+  mutate(Price = (str_replace(price, pattern = "R[$][[:space:]]", replacement = ""))) %>% 
+  select(name, price)
+
+renderNumber = function(number){
+  return(parse_number(gsub(",", ".", (gsub("[.]", "", (str_replace(number, pattern = "R[$][[:space:]]", replacement = "")))))))
+}
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Celulares mais vendidos
+
+```{r}
+renderDataTable({
+  new_table 
+})
+
+```
+
+Column 
+-----------------------------------------------------------------------
+
+### Estatísticas
+
+```{r}
+new_table %>% 
+  summarise(
+    Media = mean(renderNumber(price)), 
+    Mediana = median(renderNumber(price)))
+```
+
+### Boxplot
+
+```{r}
+
+new_table %>% 
+  ggplot() +
+  aes(y = renderNumber(price)) +
+  geom_boxplot() +
+  theme(legend.position = "top")
+
+
+```
+
+### Histograma
+
+```{r}
+
+new_table %>% 
+  ggplot() +
+  aes(x = renderNumber(price)) +
+  geom_histogram() +
+  theme(legend.position = "top")
+
+
+```
+
+
