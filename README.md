@@ -38,7 +38,7 @@ No projeto foram utilizadas as seguintes tecnologias:
   <tr>
     <td align="center">
       <a href="#">
-        <img src="https://media-exp1.licdn.com/dms/image/C4D03AQEEieIa-_h22g/profile-displayphoto-shrink_800_800/0/1651164045663?e=1658966400&v=beta&t=20osuQdvJ8V16r834e0NxcSHYMEE_1t-okD5LF-wATw" width="160px;" alt="Foto do João Guilherme Lima"/><br>
+        <img src="https://media.licdn.com/dms/image/C4D03AQEEieIa-_h22g/profile-displayphoto-shrink_800_800/0/1651164045663?e=1680134400&v=beta&t=1zUawNrVwyQXtnmHX_Tz8sfPHHuvbHGraEHiiN9AwDU" width="160px;" alt="Foto do João Guilherme Lima"/><br>
           <sub>
             <b>João Guilherme</b>
           </sub>
